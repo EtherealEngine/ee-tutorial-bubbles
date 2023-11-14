@@ -1,8 +1,11 @@
-import { defineComponent, getComponent, useComponent } from "@etherealengine/engine/src/ecs/functions/ComponentFunctions"
-import { useEntityContext } from "@etherealengine/engine/src/ecs/functions/EntityFunctions"
+import { defineComponent, getComponent, setComponent, useComponent } from "@etherealengine/engine/src/ecs/functions/ComponentFunctions"
+import { createEntity, useEntityContext } from "@etherealengine/engine/src/ecs/functions/EntityFunctions"
 import { Color, Mesh, MeshStandardMaterial, SphereGeometry, Vector3 } from "three"
 import { useEffect } from "react"
 import { addObjectToGroup } from "@etherealengine/engine/src/scene/components/GroupComponent"
+import { createNewEditorNode } from "@etherealengine/engine/src/scene/systems/SceneLoadingSystem"
+import { Entity } from "@etherealengine/engine/src/ecs/classes/Entity"
+import { NameComponent } from "@etherealengine/engine/src/scene/components/NameComponent"
 
 export const BubbleComponent = defineComponent({
   //name: The human-readable label for the component. This will be displayed in the editor and debugging tools.
@@ -15,8 +18,9 @@ export const BubbleComponent = defineComponent({
     return {
       color: new Color(0xFFFFFF),
       direction: new Vector3(0, 1, 0),
-      speed: 1,
-      bubble: null as Mesh | null
+      speed: .1,
+      bubble: null as Mesh | null,
+      bubbleEntity: null as Entity | null
     }
   },
   //onSet: Set function that is called whenever the component's data is updated via the setComponent function. This is where deserialize logic should
@@ -46,9 +50,12 @@ export const BubbleComponent = defineComponent({
 
     //a useEffect with no dependencies will only run once, when the component is first initialized
     useEffect(() => {
+      bubbleComponent.bubbleEntity.set(createEntity())
+      createNewEditorNode(bubbleComponent.bubbleEntity.value!,[],entity)
+      setComponent(bubbleComponent.bubbleEntity.value!, NameComponent, "Bubble")
       const bubbleMesh = new Mesh(new SphereGeometry(), new MeshStandardMaterial())
       bubbleMesh.material.color = bubbleComponent.color.value
-      addObjectToGroup(entity, bubbleMesh)
+      addObjectToGroup(bubbleComponent.bubbleEntity.value!, bubbleMesh)
       bubbleComponent.bubble.set(bubbleMesh)
     }, [])
 

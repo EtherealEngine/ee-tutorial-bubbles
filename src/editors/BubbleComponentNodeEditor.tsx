@@ -6,6 +6,7 @@ import { BubbleComponent } from '../components/BubbleComponent'
 import NodeEditor from '@etherealengine/editor/src/components/properties/NodeEditor'
 import InputGroup from '@etherealengine/editor/src/components/inputs/InputGroup'
 import { ColorInput } from '@etherealengine/editor/src/components/inputs/ColorInput'
+import AlbumIcon from '@mui/icons-material/Album';
 
 
 export const BubbleNodeEditor: EditorComponentType = (props) => {
@@ -20,3 +21,4 @@ export const BubbleNodeEditor: EditorComponentType = (props) => {
       </InputGroup>
     </NodeEditor>
 }
+BubbleNodeEditor.iconComponent = AlbumIcon

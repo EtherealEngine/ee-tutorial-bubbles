@@ -1,17 +1,33 @@
-import { defineQuery, getComponent } from "@etherealengine/engine/src/ecs/functions/ComponentFunctions";
+import { defineQuery, getComponent, getMutableComponent } from "@etherealengine/engine/src/ecs/functions/ComponentFunctions";
 import { defineSystem } from "@etherealengine/engine/src/ecs/functions/SystemFunctions";
 import { BubbleComponent } from "../components/BubbleComponent";
 import { LocalTransformComponent } from "@etherealengine/engine/src/transform/components/TransformComponent";
+import { NO_PROXY, getState } from "@etherealengine/hyperflux";
+import { EngineState } from "@etherealengine/engine/src/ecs/classes/EngineState";
+import { Vector3 } from "three";
 
 const bubbleQuery = defineQuery([BubbleComponent])
+
+let collectedtime = 0 //Assign out of system so scope persists
+const tempvector = new Vector3(0,0,0)
 
 export const BubbleSystem = defineSystem({
   uuid: "BubbleSystem",
   execute: () => {
+    const { elapsedSeconds, deltaSeconds } = getState(EngineState)
     for (const entity of bubbleQuery()) {
       const bubbleComponent = getComponent(entity, BubbleComponent)
-      const localTransform = getComponent(entity, LocalTransformComponent)
-      localTransform.position.add(bubbleComponent.direction.clone().multiplyScalar(bubbleComponent.speed))
+      const localTransform = getMutableComponent(bubbleComponent.bubbleEntity!, LocalTransformComponent)
+      tempvector.addVectors(localTransform.position.value, bubbleComponent.direction.clone().multiplyScalar(bubbleComponent.speed))
+      localTransform?.position.set(tempvector)
+
+      if(collectedtime >= 5) { //Reset Position and collectedTime
+        tempvector.set(0,0,0)
+        localTransform.position.set(tempvector)
+        collectedtime = 0
+      } else {
+        collectedtime += deltaSeconds //CollectElapsed seconds since System has been ran
+      }
     }
   }
 })
