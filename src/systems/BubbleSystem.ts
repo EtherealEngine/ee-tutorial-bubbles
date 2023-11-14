@@ -9,13 +9,14 @@ import { Vector3 } from "three";
 const bubbleQuery = defineQuery([BubbleComponent])
 
 let collectedtime = 0 //Assign out of system so scope persists
-const tempvector = new Vector3(0,0,0)
+
 
 export const BubbleSystem = defineSystem({
   uuid: "BubbleSystem",
   execute: () => {
     const { elapsedSeconds, deltaSeconds } = getState(EngineState)
     for (const entity of bubbleQuery()) {
+      const tempvector = new Vector3(0,0,0)
       const bubbleComponent = getComponent(entity, BubbleComponent)
       const localTransform = getMutableComponent(bubbleComponent.bubbleEntity!, LocalTransformComponent)
       tempvector.addVectors(localTransform.position.value, bubbleComponent.direction.clone().multiplyScalar(bubbleComponent.speed))
