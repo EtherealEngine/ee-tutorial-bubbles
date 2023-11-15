@@ -20,11 +20,11 @@ export const BubbleSystem = defineSystem({
       const bubbleComponent = getComponent(entity, BubbleComponent)
       const localTransform = getMutableComponent(bubbleComponent.bubbleEntity!, LocalTransformComponent)
       tempvector.addVectors(localTransform.position.value, bubbleComponent.direction.clone().multiplyScalar(bubbleComponent.speed))
-      localTransform?.position.set(tempvector)
+      localTransform.position.get(NO_PROXY).copy(tempvector)
 
       if(collectedtime >= 5) { //Reset Position and collectedTime
         tempvector.set(0,0,0)
-        localTransform.position.set(tempvector)
+        localTransform.position.get(NO_PROXY).copy(tempvector)
         collectedtime = 0
       } else {
         collectedtime += deltaSeconds //CollectElapsed seconds since System has been ran

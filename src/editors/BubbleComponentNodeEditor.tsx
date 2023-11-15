@@ -7,6 +7,8 @@ import NodeEditor from '@etherealengine/editor/src/components/properties/NodeEdi
 import InputGroup from '@etherealengine/editor/src/components/inputs/InputGroup'
 import { ColorInput } from '@etherealengine/editor/src/components/inputs/ColorInput'
 import AlbumIcon from '@mui/icons-material/Album';
+import NumericInput from '@etherealengine/editor/src/components/inputs/NumericInput'
+import Vector3Input from '@etherealengine/editor/src/components/inputs/Vector3Input'
 
 
 export const BubbleNodeEditor: EditorComponentType = (props) => {
@@ -17,6 +19,20 @@ export const BubbleNodeEditor: EditorComponentType = (props) => {
           value={bubbleComponent.color.value}
           onChange={updateProperty(BubbleComponent, 'color')}
           onRelease={commitProperty(BubbleComponent, 'color')}
+        />
+      </InputGroup>
+      <InputGroup name="Speed" label="Bubble Speed">
+        <NumericInput
+          value={bubbleComponent.speed.value}
+          onChange={updateProperty(BubbleComponent, 'speed')}
+          onRelease={commitProperty(BubbleComponent, 'speed')}
+        />
+      </InputGroup>
+      <InputGroup name="Direction" label="Bubble Direction">
+        <Vector3Input
+          value={bubbleComponent.direction.value}
+          onChange={updateProperty(BubbleComponent, 'direction')}
+          onRelease={commitProperty(BubbleComponent, 'direction')}
         />
       </InputGroup>
     </NodeEditor>
