@@ -88,7 +88,7 @@ export const BubbleEmitterComponent = defineComponent({
       const { elapsedSeconds, deltaSeconds } = getState(EngineState)
       ageEmitterBubbles(entity, deltaSeconds)
       // Spawning a single bubble as an example
-      // Exercise: Using this system. Spawn multiple bubbles with varying x,z Localtransform positons
+      // [Exercise 1]: Using this system. Spawn multiple bubbles with varying x,z Localtransform positons
       // Remove them if they are too old(bubble.age > 10 seconds)
       if(emitterComponent.bubbleEntities.value!.length < 1) { //For example ensuring there is only one bubble being added
         const bubbleEntity = createEntity()
