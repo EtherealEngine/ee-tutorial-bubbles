@@ -2,7 +2,7 @@ import React from 'react'
 
 import { EditorComponentType, commitProperty, updateProperty } from '@etherealengine/editor/src/components/properties/Util'
 import { getComponent, useComponent } from '@etherealengine/engine/src/ecs/functions/ComponentFunctions'
-import { BubbleComponent } from '../components/BubbleComponent'
+import { BubbleEmitterComponent } from '../components/BubbleEmitterComponent'
 import NodeEditor from '@etherealengine/editor/src/components/properties/NodeEditor'
 import InputGroup from '@etherealengine/editor/src/components/inputs/InputGroup'
 import { ColorInput } from '@etherealengine/editor/src/components/inputs/ColorInput'
@@ -12,27 +12,27 @@ import Vector3Input from '@etherealengine/editor/src/components/inputs/Vector3In
 
 
 export const BubbleNodeEditor: EditorComponentType = (props) => {
-  const bubbleComponent = useComponent(props.entity, BubbleComponent)
+  const emitterComponent = useComponent(props.entity, BubbleEmitterComponent)
   return <NodeEditor description={'Description'} {...props}>
       <InputGroup name="Color" label="Bubble Color">
         <ColorInput
-          value={bubbleComponent.color.value}
-          onChange={updateProperty(BubbleComponent, 'color')}
-          onRelease={commitProperty(BubbleComponent, 'color')}
+          value={emitterComponent.color.value}
+          onChange={updateProperty(BubbleEmitterComponent, 'color')}
+          onRelease={commitProperty(BubbleEmitterComponent, 'color')}
         />
       </InputGroup>
       <InputGroup name="Speed" label="Bubble Speed">
         <NumericInput
-          value={bubbleComponent.speed.value}
-          onChange={updateProperty(BubbleComponent, 'speed')}
-          onRelease={commitProperty(BubbleComponent, 'speed')}
+          value={emitterComponent.speed.value}
+          onChange={updateProperty(BubbleEmitterComponent, 'speed')}
+          onRelease={commitProperty(BubbleEmitterComponent, 'speed')}
         />
       </InputGroup>
       <InputGroup name="Direction" label="Bubble Direction">
         <Vector3Input
-          value={bubbleComponent.direction.value}
-          onChange={updateProperty(BubbleComponent, 'direction')}
-          onRelease={commitProperty(BubbleComponent, 'direction')}
+          value={emitterComponent.direction.value}
+          onChange={updateProperty(BubbleEmitterComponent, 'direction')}
+          onRelease={commitProperty(BubbleEmitterComponent, 'direction')}
         />
       </InputGroup>
     </NodeEditor>

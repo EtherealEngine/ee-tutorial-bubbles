@@ -3,7 +3,7 @@ import { ComponentShelfCategories } from '@etherealengine/editor/src/components/
 import { EntityNodeEditor } from '@etherealengine/editor/src/functions/ComponentEditors'
 import { getState } from "@etherealengine/hyperflux";
 import { EngineState } from "@etherealengine/engine/src/ecs/classes/EngineState";
-import { BubbleComponent } from "./components/BubbleComponent";
+import { BubbleEmitterComponent } from "./components/BubbleEmitterComponent";
 import { BubbleNodeEditor } from "./editors/BubbleComponentNodeEditor";
 import { startSystem } from "@etherealengine/engine/src/ecs/functions/SystemFunctions";
 import { BubbleSystem } from "./systems/BubbleSystem";
@@ -13,8 +13,8 @@ export default async function worldInjection() {
   if (isClient) {
     if (getState(EngineState).isEditing)
     {
-      EntityNodeEditor.set(BubbleComponent, BubbleNodeEditor)
-      ComponentShelfCategories.Misc.push(BubbleComponent)
+      EntityNodeEditor.set(BubbleEmitterComponent, BubbleNodeEditor)
+      ComponentShelfCategories.Misc.push(BubbleEmitterComponent)
     }
     startSystem(BubbleSystem, { after: SimulationSystemGroup })
   }
