@@ -91,7 +91,7 @@ export const BubbleEmitterComponent = defineComponent({
 
       // Spawning a single bubble as an example
       // [Exercise 1]: Using this system. Spawn multiple bubbles with varying x,z Localtransform positons
-      // [Exercise 3]: Remove them if they are too old(bubble.age > 10 seconds)[This can be done in a couple ways(reactively and within this sytem synchronosly)]
+      // [Exercise 3]: Remove them if they are too old(bubble.age > N seconds)[This can be done in a couple ways(reactively and within this sytem synchronosly)]
       if(emitterComponent.bubbleEntities.value!.length < 1) { //For example ensuring there is only one bubble being added
         const bubbleEntity = createEntity()
         setComponent(bubbleEntity, BubbleComponent)
