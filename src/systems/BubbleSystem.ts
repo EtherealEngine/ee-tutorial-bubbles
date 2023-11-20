@@ -18,6 +18,7 @@ export const BubbleSystem = defineSystem({
       const tempvector = new Vector3(0,0,0)
       const emitterComponent = getComponent(entity, BubbleEmitterComponent)
       const localTransform = getMutableComponent(emitterComponent.bubbleEntities![0], LocalTransformComponent)
+      if(!localTransform) continue;
       tempvector.addVectors(localTransform.position.value, emitterComponent.direction.clone().multiplyScalar(emitterComponent.speed))
       localTransform.position.get(NO_PROXY).copy(tempvector)
 
