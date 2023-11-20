@@ -21,7 +21,7 @@ export const BubbleSystem = defineSystem({
       tempvector.addVectors(localTransform.position.value, emitterComponent.direction.clone().multiplyScalar(emitterComponent.speed))
       localTransform.position.get(NO_PROXY).copy(tempvector)
 
-      // [Exercise 3]: Utilizing an AvatarComponent Query, TransformComponent positions of bubble entities, and Vector3.distanceTo
+      // [Exercise 4]: Utilizing an AvatarComponent Query, TransformComponent positions of bubble entities, and Vector3.distanceTo
       // Detect if the player is near a bubble and remove it
     }
   }
