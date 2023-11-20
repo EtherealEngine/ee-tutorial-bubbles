@@ -5,11 +5,13 @@ import { LocalTransformComponent } from "@etherealengine/engine/src/transform/co
 import { NO_PROXY, getState } from "@etherealengine/hyperflux";
 import { EngineState } from "@etherealengine/engine/src/ecs/classes/EngineState";
 import { Vector3 } from "three";
+import { SimulationSystemGroup } from "@etherealengine/engine/src/ecs/functions/EngineFunctions";
 
 const bubbleEmitterQuery = defineQuery([BubbleEmitterComponent])
 
 export const BubbleSystem = defineSystem({
   uuid: "BubbleSystem",
+  insert: { after: SimulationSystemGroup },
   execute: () => {
     for (const entity of bubbleEmitterQuery()) {
       // [Exercise 2]: Using the below basic setup. Move every bubble not just the first one

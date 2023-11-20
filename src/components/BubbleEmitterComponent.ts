@@ -14,8 +14,6 @@ import { useExecute } from "@etherealengine/engine/src/ecs/functions/SystemFunct
 import { SimulationSystemGroup } from "@etherealengine/engine/src/ecs/functions/EngineFunctions"
 import { EngineState } from "@etherealengine/engine/src/ecs/classes/EngineState"
 
-let collectedtime = 0 //Assign out of system so scope persists
-
 export const BubbleEmitterComponent = defineComponent({
   //name: The human-readable label for the component. This will be displayed in the editor and debugging tools.
   name: "Bubble Emitter Component",
@@ -52,13 +50,13 @@ export const BubbleEmitterComponent = defineComponent({
   //reactor: The reactor function is where async reactive logic is defined. Any side-effects that depend upon component data should be defined here.
   //reactive: 
   reactor: () => {
-    //get the entity using useEntityContext
+    // get the entity using useEntityContext
     const entity = useEntityContext()
 
-    //get a reactive component state with useComponent
+    // get a reactive component state with useComponent
     const emitterComponent = useComponent(entity, BubbleEmitterComponent)
 
-    //a useEffect with no dependencies will only run once, when the component is first initialized
+    // a useEffect with no dependencies will only run once, when the component is first initialized
     // it's return statement will run when the component is unmounted
     useEffect(() => {
       return () => {
@@ -84,12 +82,16 @@ export const BubbleEmitterComponent = defineComponent({
     }, [emitterComponent.color])
 
     // useExecute is a way we can define a System within a reactive context
+    // Systems will run once per frame
+    // You must explicitly say where you want your system to run(i.e. after SimulationSystemGroup)
     useExecute(() => {
       const { elapsedSeconds, deltaSeconds } = getState(EngineState)
-      ageEmitterBubbles(entity, deltaSeconds)
+      ageEmitterBubbles(entity, deltaSeconds) // This function is accumulating the age of every bubble with the time from deltaSeconds.
+      // deltaSeconds is the time since the last system execute occured
+
       // Spawning a single bubble as an example
       // [Exercise 1]: Using this system. Spawn multiple bubbles with varying x,z Localtransform positons
-      // Remove them if they are too old(bubble.age > 10 seconds)
+      // Remove them if they are too old(bubble.age > 10 seconds)[This can be done in a couple ways(reactively and within this sytem synchronosly)]
       if(emitterComponent.bubbleEntities.value!.length < 1) { //For example ensuring there is only one bubble being added
         const bubbleEntity = createEntity()
         setComponent(bubbleEntity, BubbleComponent)
@@ -101,17 +103,16 @@ export const BubbleEmitterComponent = defineComponent({
         emitterComponent.bubbleEntities.set([...currEntities!,bubbleEntity])
       }
 
-      if(collectedtime >= 5) { // Delete one bubble and collectTime(each bubble is collecting an age independantly for your convience)
-        collectedtime = 0
+      if(emitterComponent.bubbleEntities![0].age >= 5) { // Delete one bubble after its age is greater than 5 seconds
         removeBubble(entity,emitterComponent.bubbleEntities![0])
-      } else {
-        collectedtime += deltaSeconds // Collect elapsed seconds since System has been ran
       }
     }, { after: SimulationSystemGroup })
 
     return null
   },
 })
+
+// These functions are not to be changed (unless there's a bug in them and I messed up.)
 
 /**
  * Remove bubble entity from emitter
@@ -121,9 +122,9 @@ export function removeBubble(emitterEntity: Entity, bubbleEntity: Entity): void 
   const currEntities = emitter.bubbleEntities.get(NO_PROXY)!
   const index = currEntities.indexOf(bubbleEntity);
   if (index > -1) { // only splice array when item is found
-    currEntities.splice(index, 1)
-    emitter.bubbleEntities.set(currEntities)// 2nd parameter means remove one item only
-    removeEntity(bubbleEntity)
+    currEntities.splice(index, 1) // deletes one entiry from array in place. 2nd Parameter means remove only one
+    emitter.bubbleEntities.set(currEntities)
+    removeEntity(bubbleEntity) // removes the given entity from the ECS
   }
 }
 
@@ -133,8 +134,8 @@ export function removeBubble(emitterEntity: Entity, bubbleEntity: Entity): void 
 export function ageEmitterBubbles(emitterEntity: Entity, deltaSeconds: number): void {
   const emitter = getComponent(emitterEntity, BubbleEmitterComponent)
   for(const bubbleEntity of emitter.bubbleEntities!) {
-    const bubble = getMutableComponent(bubbleEntity, BubbleComponent)
+    const bubble = getMutableComponent(bubbleEntity, BubbleComponent) // getMutable gets the reactified version of the component that will respond to effects
     const currAge = bubble.age.get(NO_PROXY)
-    bubble.age.set(currAge+deltaSeconds)
+    bubble.age.set(currAge+deltaSeconds) // increment individual bubble age.
   }
 }
