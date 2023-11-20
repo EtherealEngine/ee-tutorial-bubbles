@@ -103,8 +103,10 @@ export const BubbleEmitterComponent = defineComponent({
         emitterComponent.bubbleEntities.set([...currEntities!,bubbleEntity])
       }
 
-      if(emitterComponent.bubbleEntities![0].age >= 5) { // Delete one bubble after its age is greater than 5 seconds
-        removeBubble(entity,emitterComponent.bubbleEntities![0])
+      const bubble = getComponent(emitterComponent.bubbleEntities.value![0], BubbleComponent)
+
+      if(bubble.age >= 5) { // Delete one bubble after its age is greater than 5 seconds
+        removeBubble(entity,emitterComponent.bubbleEntities.value![0])
       }
     }, { after: SimulationSystemGroup })
 
