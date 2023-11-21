@@ -120,7 +120,7 @@ export const BubbleEmitterComponent = defineComponent({
  * Remove bubble entity from emitter
  */
 export function removeBubble(emitterEntity: Entity, bubbleEntity: Entity): void {
-  const emitter = getMutableComponent(emitterEntity, BubbleEmitterComponent)
+  const emitter = getMutableComponent(emitterEntity, BubbleEmitterComponent) // Reactive incase someone wants to use it reactively
   const currEntities = emitter.bubbleEntities.get(NO_PROXY)!
   const index = currEntities.indexOf(bubbleEntity);
   if (index > -1) { // only splice array when item is found
@@ -136,7 +136,7 @@ export function removeBubble(emitterEntity: Entity, bubbleEntity: Entity): void 
 export function ageEmitterBubbles(emitterEntity: Entity, deltaSeconds: number): void {
   const emitter = getComponent(emitterEntity, BubbleEmitterComponent)
   for(const bubbleEntity of emitter.bubbleEntities!) {
-    const bubble = getMutableComponent(bubbleEntity, BubbleComponent) // getMutable gets the reactified version of the component that will respond to effects
+    const bubble = getMutableComponent(bubbleEntity, BubbleComponent) // getMutable gets the reactified version of the component that will respond to effects(if you want to try checking age reactively)
     const currAge = bubble.age.get(NO_PROXY)
     bubble.age.set(currAge+deltaSeconds) // increment individual bubble age.
   }

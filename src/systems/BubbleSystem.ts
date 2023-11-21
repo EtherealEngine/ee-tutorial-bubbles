@@ -8,6 +8,7 @@ import { Vector3 } from "three";
 import { SimulationSystemGroup } from "@etherealengine/engine/src/ecs/functions/EngineFunctions";
 
 const bubbleEmitterQuery = defineQuery([BubbleEmitterComponent])
+const velocity = new Vector3(0,0,0)
 
 export const BubbleSystem = defineSystem({
   uuid: "BubbleSystem",
@@ -17,10 +18,11 @@ export const BubbleSystem = defineSystem({
       // [Exercise 2]: Using the below basic setup. Move every bubble not just the first one
       const tempvector = new Vector3(0,0,0)
       const emitterComponent = getComponent(entity, BubbleEmitterComponent)
-      const localTransform = getMutableComponent(emitterComponent.bubbleEntities![0], LocalTransformComponent)
+      const localTransform = getComponent(emitterComponent.bubbleEntities![0], LocalTransformComponent)
       if(!localTransform) continue;
-      tempvector.addVectors(localTransform.position.value, emitterComponent.direction.clone().multiplyScalar(emitterComponent.speed))
-      localTransform.position.get(NO_PROXY).copy(tempvector)
+      velocity.copy(emitterComponent.direction).multiplyScalar(emitterComponent.speed)
+      tempvector.addVectors(localTransform.position, velocity)
+      localTransform.position.copy(tempvector)
 
       // [Exercise 4]: Utilizing an AvatarComponent Query, TransformComponent positions of bubble entities, and Vector3.distanceTo
       // Detect if the player is near a bubble and remove it
