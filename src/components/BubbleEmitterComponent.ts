@@ -99,8 +99,7 @@ export const BubbleEmitterComponent = defineComponent({
           parentEntity: entity,
           uuid: MathUtils.generateUUID() as EntityUUID
         })
-        const currEntities = emitterComponent.bubbleEntities.get(NO_PROXY)
-        emitterComponent.bubbleEntities.set([...currEntities!,bubbleEntity])
+        emitterComponent.bubbleEntities.merge([bubbleEntity])
       }
 
       const bubble = getComponent(emitterComponent.bubbleEntities.value![0], BubbleComponent)
