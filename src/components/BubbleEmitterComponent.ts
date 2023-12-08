@@ -13,6 +13,7 @@ import { NO_PROXY, getState } from "@etherealengine/hyperflux"
 import { useExecute } from "@etherealengine/engine/src/ecs/functions/SystemFunctions"
 import { SimulationSystemGroup } from "@etherealengine/engine/src/ecs/functions/EngineFunctions"
 import { EngineState } from "@etherealengine/engine/src/ecs/classes/EngineState"
+import { LocalTransformComponent } from "@etherealengine/engine/src/transform/components/TransformComponent"
 
 export const BubbleEmitterComponent = defineComponent({
   //name: The human-readable label for the component. This will be displayed in the editor and debugging tools.
@@ -92,15 +93,22 @@ export const BubbleEmitterComponent = defineComponent({
       // Spawning a single bubble as an example
       // [Exercise 1]: Using this system. Spawn multiple bubbles with varying x,z Localtransform positons
       // [Exercise 3]: Remove them if they are too old(bubble.age > N seconds)[This can be done in a couple ways(reactively and within this sytem synchronosly)]
-      if(emitterComponent.bubbleEntities.value!.length < 1) { //For example ensuring there is only one bubble being added
+      const bubbles: Array<Entity> = []
+      const numExistingBubbles = emitterComponent.bubbleEntities.value!.length
+      const numBubbles = 10
+      for (let i = numExistingBubbles; i < numBubbles; i++) {
         const bubbleEntity = createEntity()
         setComponent(bubbleEntity, BubbleComponent)
+        setComponent(bubbleEntity, LocalTransformComponent, {
+          position: new Vector3((Math.random() - 0.5) * 100, 0, (Math.random() - 0.5) * 100)
+        })
         setComponent(bubbleEntity, EntityTreeComponent, {
           parentEntity: entity,
           uuid: MathUtils.generateUUID() as EntityUUID
         })
-        emitterComponent.bubbleEntities.merge([bubbleEntity])
+        bubbles.push(bubbleEntity)
       }
+      emitterComponent.bubbleEntities.merge(bubbles)
 
       const bubble = getComponent(emitterComponent.bubbleEntities.value![0], BubbleComponent)
 
