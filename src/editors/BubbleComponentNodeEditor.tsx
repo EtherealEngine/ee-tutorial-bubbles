@@ -1,7 +1,6 @@
 import React from 'react'
 
 import { EditorComponentType, commitProperty, updateProperty } from '@etherealengine/editor/src/components/properties/Util'
-import { getComponent, useComponent } from '@etherealengine/engine/src/ecs/functions/ComponentFunctions'
 import { BubbleEmitterComponent } from '../components/BubbleEmitterComponent'
 import NodeEditor from '@etherealengine/editor/src/components/properties/NodeEditor'
 import InputGroup from '@etherealengine/editor/src/components/inputs/InputGroup'
@@ -9,7 +8,7 @@ import { ColorInput } from '@etherealengine/editor/src/components/inputs/ColorIn
 import AlbumIcon from '@mui/icons-material/Album';
 import NumericInput from '@etherealengine/editor/src/components/inputs/NumericInput'
 import Vector3Input from '@etherealengine/editor/src/components/inputs/Vector3Input'
-
+import { useComponent } from '@etherealengine/ecs'
 
 export const BubbleNodeEditor: EditorComponentType = (props) => {
   const emitterComponent = useComponent(props.entity, BubbleEmitterComponent)
