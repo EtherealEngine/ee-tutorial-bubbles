@@ -1,11 +1,11 @@
-import { isClient } from "@etherealengine/engine/src/common/functions/getEnvironment";
 import { ComponentShelfCategories } from '@etherealengine/editor/src/components/element/ElementList'
 import { EntityNodeEditor } from '@etherealengine/editor/src/functions/ComponentEditors'
 import { getState } from "@etherealengine/hyperflux";
-import { EngineState } from "@etherealengine/engine/src/ecs/classes/EngineState";
 import { BubbleEmitterComponent } from "./components/BubbleEmitterComponent";
 import { BubbleNodeEditor } from "./editors/BubbleComponentNodeEditor";
 import { BubbleSystem } from "./systems/BubbleSystem";
+import { isClient } from '@etherealengine/common/src/utils/getEnvironment';
+import { EngineState } from '@etherealengine/engine/src/EngineState';
 
 export default async function worldInjection() {
   if (isClient) {
