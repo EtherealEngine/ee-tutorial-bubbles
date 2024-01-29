@@ -1,15 +1,13 @@
-import { defineComponent, getComponent, setComponent, useComponent } from "@etherealengine/engine/src/ecs/functions/ComponentFunctions"
-import { createEntity, useEntityContext } from "@etherealengine/engine/src/ecs/functions/EntityFunctions"
-import { Color, MathUtils, Mesh, MeshStandardMaterial, SphereGeometry, Vector3 } from "three"
-import { useEffect } from "react"
-import { addObjectToGroup } from "@etherealengine/engine/src/scene/components/GroupComponent"
-import { Entity } from "@etherealengine/engine/src/ecs/classes/Entity"
-import { NameComponent } from "@etherealengine/engine/src/scene/components/NameComponent"
-import { EntityUUID } from "@etherealengine/common/src/interfaces/EntityUUID"
-import { EntityTreeComponent } from "@etherealengine/engine/src/ecs/functions/EntityTree"
-import { VisibleComponent } from "@etherealengine/engine/src/scene/components/VisibleComponent"
-import { LocalTransformComponent } from "@etherealengine/engine/src/transform/components/TransformComponent"
+
+import { defineComponent, useEntityContext, setComponent } from "@etherealengine/ecs"
+import { NameComponent } from "@etherealengine/engine/src/common/NameComponent"
+import { addObjectToGroup } from "@etherealengine/engine/src/renderer/components/GroupComponent"
+import { VisibleComponent } from "@etherealengine/engine/src/renderer/components/VisibleComponent"
+import { Mesh, SphereGeometry, MeshStandardMaterial, Color } from "three"
 import matches from "ts-matches"
+
+import React, { useEffect } from "react"
+import { TransformComponent } from "@etherealengine/engine/src/transform/components/TransformComponent"
 
 export const BubbleComponent = defineComponent({
   //name: The human-readable label for the component. This will be displayed in the editor and debugging tools.
@@ -44,7 +42,7 @@ export const BubbleComponent = defineComponent({
     useEffect(() => {
       setComponent(entity, VisibleComponent) // Set if the entity is visible
       setComponent(entity, NameComponent, "Bubble") // Give the entity a name
-      setComponent(entity, LocalTransformComponent) // Give the entity a local transform
+      setComponent(entity, TransformComponent) // Give the entity a local transform
       const bubbleMesh = new Mesh(new SphereGeometry(), new MeshStandardMaterial())
       bubbleMesh.material.color = new Color(0xFFFFFF)
       addObjectToGroup(entity, bubbleMesh) // Add GroupComponent and add mesh to Group

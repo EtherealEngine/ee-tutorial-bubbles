@@ -1,18 +1,15 @@
-import { defineComponent, getComponent, getMutableComponent, setComponent, useComponent } from "@etherealengine/engine/src/ecs/functions/ComponentFunctions"
-import { createEntity, removeEntity, useEntityContext } from "@etherealengine/engine/src/ecs/functions/EntityFunctions"
-import { BufferGeometry, Color, MathUtils, Mesh, MeshStandardMaterial, SphereGeometry, Vector3 } from "three"
-import { useEffect } from "react"
-import { GroupComponent, addObjectToGroup } from "@etherealengine/engine/src/scene/components/GroupComponent"
-import { Entity } from "@etherealengine/engine/src/ecs/classes/Entity"
-import { NameComponent } from "@etherealengine/engine/src/scene/components/NameComponent"
 import { EntityUUID } from "@etherealengine/common/src/interfaces/EntityUUID"
-import { EntityTreeComponent } from "@etherealengine/engine/src/ecs/functions/EntityTree"
-import { VisibleComponent } from "@etherealengine/engine/src/scene/components/VisibleComponent"
+import { defineComponent, Entity, useEntityContext, useComponent, removeEntity, getComponent, useExecute, createEntity, setComponent, SimulationSystemGroup, getMutableComponent } from "@etherealengine/ecs"
+import { EngineState } from "@etherealengine/engine/src/EngineState"
+import { GroupComponent } from "@etherealengine/engine/src/renderer/components/GroupComponent"
+import { EntityTreeComponent } from "@etherealengine/engine/src/transform/components/EntityTree"
+import { getState, NO_PROXY } from "@etherealengine/hyperflux"
+import { Color, Vector3, Mesh, BufferGeometry, MeshStandardMaterial, MathUtils } from "three"
 import { BubbleComponent } from "./BubbleComponent"
-import { NO_PROXY, getState } from "@etherealengine/hyperflux"
-import { useExecute } from "@etherealengine/engine/src/ecs/functions/SystemFunctions"
-import { SimulationSystemGroup } from "@etherealengine/engine/src/ecs/functions/EngineFunctions"
-import { EngineState } from "@etherealengine/engine/src/ecs/classes/EngineState"
+
+import React, { useEffect } from "react"
+import { ECSState } from "@etherealengine/ecs/src/ECSState"
+
 
 export const BubbleEmitterComponent = defineComponent({
   //name: The human-readable label for the component. This will be displayed in the editor and debugging tools.
@@ -85,7 +82,8 @@ export const BubbleEmitterComponent = defineComponent({
     // Systems will run once per frame
     // You must explicitly say where you want your system to run(i.e. after SimulationSystemGroup)
     useExecute(() => {
-      const { elapsedSeconds, deltaSeconds } = getState(EngineState)
+      
+      const deltaSeconds = getState(ECSState).deltaSeconds
       ageEmitterBubbles(entity, deltaSeconds) // This function is accumulating the age of every bubble with the time from deltaSeconds.
       // deltaSeconds is the time since the last system execute occured
 
