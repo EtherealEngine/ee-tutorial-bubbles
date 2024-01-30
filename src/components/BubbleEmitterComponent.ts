@@ -1,14 +1,14 @@
 import { EntityUUID } from "@etherealengine/common/src/interfaces/EntityUUID"
 import { defineComponent, Entity, useEntityContext, useComponent, removeEntity, getComponent, useExecute, createEntity, setComponent, SimulationSystemGroup, getMutableComponent } from "@etherealengine/ecs"
-import { EngineState } from "@etherealengine/engine/src/EngineState"
-import { GroupComponent } from "@etherealengine/engine/src/renderer/components/GroupComponent"
-import { EntityTreeComponent } from "@etherealengine/engine/src/transform/components/EntityTree"
+
 import { getState, NO_PROXY } from "@etherealengine/hyperflux"
 import { Color, Vector3, Mesh, BufferGeometry, MeshStandardMaterial, MathUtils } from "three"
 import { BubbleComponent } from "./BubbleComponent"
 
 import React, { useEffect } from "react"
 import { ECSState } from "@etherealengine/ecs/src/ECSState"
+import { GroupComponent } from "@etherealengine/spatial/src/renderer/components/GroupComponent"
+import { EntityTreeComponent } from "@etherealengine/spatial/src/transform/components/EntityTree"
 
 
 export const BubbleEmitterComponent = defineComponent({

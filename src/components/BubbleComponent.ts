@@ -1,13 +1,14 @@
 
 import { defineComponent, useEntityContext, setComponent } from "@etherealengine/ecs"
-import { NameComponent } from "@etherealengine/engine/src/common/NameComponent"
-import { addObjectToGroup } from "@etherealengine/engine/src/renderer/components/GroupComponent"
-import { VisibleComponent } from "@etherealengine/engine/src/renderer/components/VisibleComponent"
+
 import { Mesh, SphereGeometry, MeshStandardMaterial, Color } from "three"
 import matches from "ts-matches"
 
 import React, { useEffect } from "react"
-import { TransformComponent } from "@etherealengine/engine/src/transform/components/TransformComponent"
+import { VisibleComponent } from "@etherealengine/spatial/src/renderer/components/VisibleComponent"
+import { NameComponent } from "@etherealengine/spatial/src/common/NameComponent"
+import { addObjectToGroup } from "@etherealengine/spatial/src/renderer/components/GroupComponent"
+import { TransformComponent } from "@etherealengine/spatial/src/transform/components/TransformComponent"
 
 export const BubbleComponent = defineComponent({
   //name: The human-readable label for the component. This will be displayed in the editor and debugging tools.

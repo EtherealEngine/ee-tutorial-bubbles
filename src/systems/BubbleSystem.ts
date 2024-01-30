@@ -1,7 +1,7 @@
 import { defineQuery, defineSystem, SimulationSystemGroup, getComponent } from "@etherealengine/ecs"
 import { Vector3 } from "three"
 import { BubbleEmitterComponent } from "../components/BubbleEmitterComponent"
-import { TransformComponent } from "@etherealengine/engine/src/transform/components/TransformComponent"
+import { TransformComponent } from "@etherealengine/spatial/src/transform/components/TransformComponent"
 
 const bubbleEmitterQuery = defineQuery([BubbleEmitterComponent])
 const velocity = new Vector3(0,0,0)

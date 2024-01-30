@@ -5,7 +5,7 @@ import { BubbleEmitterComponent } from "./components/BubbleEmitterComponent";
 import { BubbleNodeEditor } from "./editors/BubbleComponentNodeEditor";
 import { BubbleSystem } from "./systems/BubbleSystem";
 import { isClient } from '@etherealengine/common/src/utils/getEnvironment';
-import { EngineState } from '@etherealengine/engine/src/EngineState';
+import { EngineState } from '@etherealengine/spatial/src/EngineState';
 
 export default async function worldInjection() {
   if (isClient) {
