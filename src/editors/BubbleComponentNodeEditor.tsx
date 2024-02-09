@@ -1,18 +1,23 @@
 import React from 'react'
 
-import { EditorComponentType, commitProperty, updateProperty } from '@etherealengine/editor/src/components/properties/Util'
-import { BubbleEmitterComponent } from '../components/BubbleEmitterComponent'
-import NodeEditor from '@etherealengine/editor/src/components/properties/NodeEditor'
-import InputGroup from '@etherealengine/editor/src/components/inputs/InputGroup'
+import { useComponent } from '@etherealengine/ecs'
 import { ColorInput } from '@etherealengine/editor/src/components/inputs/ColorInput'
-import AlbumIcon from '@mui/icons-material/Album';
+import InputGroup from '@etherealengine/editor/src/components/inputs/InputGroup'
 import NumericInput from '@etherealengine/editor/src/components/inputs/NumericInput'
 import Vector3Input from '@etherealengine/editor/src/components/inputs/Vector3Input'
-import { useComponent } from '@etherealengine/ecs'
+import NodeEditor from '@etherealengine/editor/src/components/properties/NodeEditor'
+import {
+  EditorComponentType,
+  commitProperty,
+  updateProperty
+} from '@etherealengine/editor/src/components/properties/Util'
+import AlbumIcon from '@mui/icons-material/Album'
+import { BubbleEmitterComponent } from '../components/BubbleEmitterComponent'
 
 export const BubbleNodeEditor: EditorComponentType = (props) => {
   const emitterComponent = useComponent(props.entity, BubbleEmitterComponent)
-  return <NodeEditor description={'Description'} {...props}>
+  return (
+    <NodeEditor description={'Description'} {...props}>
       <InputGroup name="Color" label="Bubble Color">
         <ColorInput
           value={emitterComponent.color.value}
@@ -35,5 +40,6 @@ export const BubbleNodeEditor: EditorComponentType = (props) => {
         />
       </InputGroup>
     </NodeEditor>
+  )
 }
 BubbleNodeEditor.iconComponent = AlbumIcon

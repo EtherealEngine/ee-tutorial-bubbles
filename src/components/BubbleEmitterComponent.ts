@@ -1,28 +1,39 @@
-import { EntityUUID } from "@etherealengine/common/src/interfaces/EntityUUID"
-import { defineComponent, Entity, useEntityContext, useComponent, removeEntity, getComponent, useExecute, createEntity, setComponent, SimulationSystemGroup, getMutableComponent } from "@etherealengine/ecs"
+import { EntityUUID } from '@etherealengine/common/src/interfaces/EntityUUID'
+import {
+  createEntity,
+  defineComponent,
+  Entity,
+  getComponent,
+  getMutableComponent,
+  removeEntity,
+  setComponent,
+  SimulationSystemGroup,
+  useComponent,
+  useEntityContext,
+  useExecute
+} from '@etherealengine/ecs'
 
-import { getState, NO_PROXY } from "@etherealengine/hyperflux"
-import { Color, Vector3, Mesh, BufferGeometry, MeshStandardMaterial, MathUtils } from "three"
-import { BubbleComponent } from "./BubbleComponent"
+import { getState, NO_PROXY } from '@etherealengine/hyperflux'
+import { BufferGeometry, Color, MathUtils, Mesh, MeshStandardMaterial, Vector3 } from 'three'
+import { BubbleComponent } from './BubbleComponent'
 
-import React, { useEffect } from "react"
-import { ECSState } from "@etherealengine/ecs/src/ECSState"
-import { GroupComponent } from "@etherealengine/spatial/src/renderer/components/GroupComponent"
-import { EntityTreeComponent } from "@etherealengine/spatial/src/transform/components/EntityTree"
-
+import { ECSState } from '@etherealengine/ecs/src/ECSState'
+import { GroupComponent } from '@etherealengine/spatial/src/renderer/components/GroupComponent'
+import { EntityTreeComponent } from '@etherealengine/spatial/src/transform/components/EntityTree'
+import { useEffect } from 'react'
 
 export const BubbleEmitterComponent = defineComponent({
   //name: The human-readable label for the component. This will be displayed in the editor and debugging tools.
-  name: "Bubble Emitter Component",
+  name: 'Bubble Emitter Component',
   //jsonID: The serialized name of the component. This is used to identify the component in the serialized scene data
-  jsonID: "bubbleEmitter",
-  //onInit: Initializer function that is called when the component is added to an entity. The return type of this function defines the 
+  jsonID: 'bubbleEmitter',
+  //onInit: Initializer function that is called when the component is added to an entity. The return type of this function defines the
   //        schema of the component's runtime data.
   onInit: (entity) => {
     return {
-      color: new Color(0xFFFFFF),
+      color: new Color(0xffffff),
       direction: new Vector3(0, 1, 0),
-      speed: .1,
+      speed: 0.1,
       bubbleEntities: [] as Entity[] | null
     }
   },
@@ -45,7 +56,7 @@ export const BubbleEmitterComponent = defineComponent({
   },
 
   //reactor: The reactor function is where async reactive logic is defined. Any side-effects that depend upon component data should be defined here.
-  //reactive: 
+  //reactive:
   reactor: () => {
     // get the entity using useEntityContext
     const entity = useEntityContext()
@@ -57,7 +68,7 @@ export const BubbleEmitterComponent = defineComponent({
     // it's return statement will run when the component is unmounted
     useEffect(() => {
       return () => {
-        for(let ent of emitterComponent.bubbleEntities.value!) {
+        for (let ent of emitterComponent.bubbleEntities.value!) {
           removeEntity(ent)
         }
       }
@@ -66,11 +77,11 @@ export const BubbleEmitterComponent = defineComponent({
     // a useEffect with dependencies will run whenever the dependencies change
     // Whenever the color is changed this will rerun and update all child bubble materials
     useEffect(() => {
-      for(let ent of emitterComponent.bubbleEntities.value!) {
+      for (let ent of emitterComponent.bubbleEntities.value!) {
         const groupComponent = getComponent(ent, GroupComponent)
         const obj = groupComponent[0]
         obj.traverse((obj: Mesh<BufferGeometry, MeshStandardMaterial>) => {
-          if(obj.isMesh) {
+          if (obj.isMesh) {
             const material = obj.material as MeshStandardMaterial
             material.color.copy(emitterComponent.color.value)
           }
@@ -81,34 +92,38 @@ export const BubbleEmitterComponent = defineComponent({
     // useExecute is a way we can define a System within a reactive context
     // Systems will run once per frame
     // You must explicitly say where you want your system to run(i.e. after SimulationSystemGroup)
-    useExecute(() => {
-      
-      const deltaSeconds = getState(ECSState).deltaSeconds
-      ageEmitterBubbles(entity, deltaSeconds) // This function is accumulating the age of every bubble with the time from deltaSeconds.
-      // deltaSeconds is the time since the last system execute occured
+    useExecute(
+      () => {
+        const deltaSeconds = getState(ECSState).deltaSeconds
+        ageEmitterBubbles(entity, deltaSeconds) // This function is accumulating the age of every bubble with the time from deltaSeconds.
+        // deltaSeconds is the time since the last system execute occured
 
-      // Spawning a single bubble as an example
-      // [Exercise 1]: Using this system. Spawn multiple bubbles with varying x,z Localtransform positons
-      // [Exercise 3]: Remove them if they are too old(bubble.age > N seconds)[This can be done in a couple ways(reactively and within this sytem synchronosly)]
-      if(emitterComponent.bubbleEntities.value!.length < 1) { //For example ensuring there is only one bubble being added
-        const bubbleEntity = createEntity()
-        setComponent(bubbleEntity, BubbleComponent)
-        setComponent(bubbleEntity, EntityTreeComponent, {
-          parentEntity: entity,
-          uuid: MathUtils.generateUUID() as EntityUUID
-        })
-        emitterComponent.bubbleEntities.merge([bubbleEntity])
-      }
+        // Spawning a single bubble as an example
+        // [Exercise 1]: Using this system. Spawn multiple bubbles with varying x,z Localtransform positons
+        // [Exercise 3]: Remove them if they are too old(bubble.age > N seconds)[This can be done in a couple ways(reactively and within this sytem synchronosly)]
+        if (emitterComponent.bubbleEntities.value!.length < 1) {
+          //For example ensuring there is only one bubble being added
+          const bubbleEntity = createEntity()
+          setComponent(bubbleEntity, BubbleComponent)
+          setComponent(bubbleEntity, EntityTreeComponent, {
+            parentEntity: entity,
+            uuid: MathUtils.generateUUID() as EntityUUID
+          })
+          emitterComponent.bubbleEntities.merge([bubbleEntity])
+        }
 
-      const bubble = getComponent(emitterComponent.bubbleEntities.value![0], BubbleComponent)
+        const bubble = getComponent(emitterComponent.bubbleEntities.value![0], BubbleComponent)
 
-      if(bubble.age >= 5) { // Delete one bubble after its age is greater than 5 seconds
-        removeBubble(entity,emitterComponent.bubbleEntities.value![0])
-      }
-    }, { after: SimulationSystemGroup })
+        if (bubble.age >= 5) {
+          // Delete one bubble after its age is greater than 5 seconds
+          removeBubble(entity, emitterComponent.bubbleEntities.value![0])
+        }
+      },
+      { after: SimulationSystemGroup }
+    )
 
     return null
-  },
+  }
 })
 
 // These functions are not to be changed (unless there's a bug in them and I messed up.)
@@ -119,8 +134,9 @@ export const BubbleEmitterComponent = defineComponent({
 export function removeBubble(emitterEntity: Entity, bubbleEntity: Entity): void {
   const emitter = getMutableComponent(emitterEntity, BubbleEmitterComponent) // Reactive incase someone wants to use it reactively
   const currEntities = emitter.bubbleEntities.get(NO_PROXY)!
-  const index = currEntities.indexOf(bubbleEntity);
-  if (index > -1) { // only splice array when item is found
+  const index = currEntities.indexOf(bubbleEntity)
+  if (index > -1) {
+    // only splice array when item is found
     currEntities.splice(index, 1) // deletes one entiry from array in place. 2nd Parameter means remove only one
     emitter.bubbleEntities.set(currEntities)
     removeEntity(bubbleEntity) // removes the given entity from the ECS
@@ -132,9 +148,9 @@ export function removeBubble(emitterEntity: Entity, bubbleEntity: Entity): void 
  */
 export function ageEmitterBubbles(emitterEntity: Entity, deltaSeconds: number): void {
   const emitter = getComponent(emitterEntity, BubbleEmitterComponent)
-  for(const bubbleEntity of emitter.bubbleEntities!) {
+  for (const bubbleEntity of emitter.bubbleEntities!) {
     const bubble = getMutableComponent(bubbleEntity, BubbleComponent) // getMutable gets the reactified version of the component that will respond to effects(if you want to try checking age reactively)
     const currAge = bubble.age.get(NO_PROXY)
-    bubble.age.set(currAge+deltaSeconds) // increment individual bubble age.
+    bubble.age.set(currAge + deltaSeconds) // increment individual bubble age.
   }
 }
