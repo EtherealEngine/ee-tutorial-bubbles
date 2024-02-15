@@ -5,5 +5,3 @@ import './systems/BubbleSystem'
 
 /** Ensure bubble editor is imported only on the client */
 if (isClient) import('./editors/RegisterBubbleEditor')
-
-export default async function worldInjection() {}
