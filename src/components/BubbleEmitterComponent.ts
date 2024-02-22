@@ -26,7 +26,7 @@ export const BubbleEmitterComponent = defineComponent({
   //name: The human-readable label for the component. This will be displayed in the editor and debugging tools.
   name: 'Bubble Emitter Component',
   //jsonID: The serialized name of the component. This is used to identify the component in the serialized scene data
-  jsonID: 'bubbleEmitter',
+  jsonID: 'EE_tutorial_bubble_emitter',
   //onInit: Initializer function that is called when the component is added to an entity. The return type of this function defines the
   //        schema of the component's runtime data.
   onInit: (entity) => {
