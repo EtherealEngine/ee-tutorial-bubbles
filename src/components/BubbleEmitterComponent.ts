@@ -1,8 +1,8 @@
-import { EntityUUID } from '@etherealengine/ecs'
 import {
   createEntity,
   defineComponent,
   Entity,
+  EntityUUID,
   getComponent,
   getMutableComponent,
   removeEntity,
@@ -10,7 +10,8 @@ import {
   SimulationSystemGroup,
   useComponent,
   useEntityContext,
-  useExecute
+  useExecute,
+  UUIDComponent
 } from '@etherealengine/ecs'
 
 import { getState, NO_PROXY } from '@etherealengine/hyperflux'
@@ -105,10 +106,8 @@ export const BubbleEmitterComponent = defineComponent({
           //For example ensuring there is only one bubble being added
           const bubbleEntity = createEntity()
           setComponent(bubbleEntity, BubbleComponent)
-          setComponent(bubbleEntity, EntityTreeComponent, {
-            parentEntity: entity,
-            uuid: MathUtils.generateUUID() as EntityUUID
-          })
+          setComponent(bubbleEntity, EntityTreeComponent, { parentEntity: entity })
+          setComponent(bubbleEntity, UUIDComponent, MathUtils.generateUUID() as EntityUUID)
           emitterComponent.bubbleEntities.merge([bubbleEntity])
         }
 
