@@ -132,7 +132,7 @@ export const BubbleEmitterComponent = defineComponent({
  */
 export function removeBubble(emitterEntity: Entity, bubbleEntity: Entity): void {
   const emitter = getMutableComponent(emitterEntity, BubbleEmitterComponent) // Reactive incase someone wants to use it reactively
-  const currEntities = emitter.bubbleEntities.get(NO_PROXY)!
+  const currEntities = emitter.bubbleEntities.get(NO_PROXY)! as Entity[]
   const index = currEntities.indexOf(bubbleEntity)
   if (index > -1) {
     // only splice array when item is found
