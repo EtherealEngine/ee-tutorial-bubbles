@@ -1,16 +1,16 @@
 import React from 'react'
 
 import { useComponent } from '@etherealengine/ecs'
-import { ColorInput } from '@etherealengine/editor/src/components/inputs/ColorInput'
-import InputGroup from '@etherealengine/editor/src/components/inputs/InputGroup'
-import NumericInput from '@etherealengine/editor/src/components/inputs/NumericInput'
-import Vector3Input from '@etherealengine/editor/src/components/inputs/Vector3Input'
-import NodeEditor from '@etherealengine/editor/src/components/properties/NodeEditor'
 import {
   EditorComponentType,
   commitProperty,
   updateProperty
 } from '@etherealengine/editor/src/components/properties/Util'
+import InputGroup from '@etherealengine/ui/src/components/editor/input/Group'
+import NumericInput from '@etherealengine/ui/src/components/editor/input/Numeric'
+import Vector3Input from '@etherealengine/ui/src/components/editor/input/Vector3'
+import NodeEditor from '@etherealengine/ui/src/components/editor/properties/nodeEditor'
+import ColorInput from '@etherealengine/ui/src/primitives/tailwind/Color'
 import AlbumIcon from '@mui/icons-material/Album'
 import { BubbleEmitterComponent } from '../components/BubbleEmitterComponent'
 
